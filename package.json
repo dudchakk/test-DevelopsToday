@@ -6,8 +6,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
-		"prettier:format": "prettier \"**/*.{js,mjs,ts,tsx,json,css,html}\" --write"
+		"prettier:format": "prettier \"**/*.{js,mjs,ts,tsx,json,css,html}\" --write",
+		"lint:check": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
 		"next": "14.2.20",
@@ -15,13 +16,28 @@
 		"react-dom": "18.3.1"
 	},
 	"devDependencies": {
+		"@eslint/js": "9.11.1",
+		"@next/eslint-plugin-next": "14.2.13",
+		"@stylistic/eslint-plugin": "2.8.0",
+		"@types/eslint__js": "8.42.3",
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
+		"@typescript-eslint/eslint-plugin": "8.7.0",
+		"@typescript-eslint/parser": "8.7.0",
 		"autoprefixer": "^10.4.20",
+		"eslint": "8.57.0",
+		"eslint-import-resolver-typescript": "3.6.3",
+		"eslint-plugin-import": "2.30.0",
+		"eslint-plugin-jsx-a11y": "^6.8.0",
+		"eslint-plugin-perfectionist": "3.7.0",
+		"eslint-plugin-react": "7.37.0",
+		"eslint-plugin-react-hooks": "4.6.2",
+		"eslint-plugin-tailwindcss": "3.17.4",
+		"globals": "15.9.0",
 		"postcss": "^8.4.49",
+		"prettier": "3.4.2",
 		"tailwindcss": "^3.4.16",
-		"typescript": "^5",
-		"prettier": "3.4.2"
+		"typescript": "5.5.4"
 	}
 }

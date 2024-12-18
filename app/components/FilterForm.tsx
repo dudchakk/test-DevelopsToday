@@ -1,14 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { type ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 interface Make {
 	MakeId: string
 	MakeName: string
 }
 
-export default function FilterForm(): JSX.Element {
+interface ResponseMakes {
+	Results: Make[]
+}
+
+export default function FilterForm(): React.JSX.Element {
 	const [makes, setMakes] = useState<Make[]>([])
 	const [makeId, setMakeId] = useState<string>('')
 	const [year, setYear] = useState<string>('')
@@ -18,7 +22,7 @@ export default function FilterForm(): JSX.Element {
 			const response = await fetch(
 				'https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json',
 			)
-			const data = await response.json()
+			const data = await response.json() as ResponseMakes
 			setMakes(data.Results)
 		} catch (error) {
 			console.error('Error fetching makes:', error)
@@ -26,7 +30,7 @@ export default function FilterForm(): JSX.Element {
 	}
 
 	useEffect(() => {
-		fetchMakes()
+		void fetchMakes()
 	}, [])
 
 	const currentYear = new Date().getFullYear()
@@ -34,19 +38,23 @@ export default function FilterForm(): JSX.Element {
 		(2015 + i).toString(),
 	)
 
+	const handleMakeChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => { setMakeId(e.target.value); }, [])
+
+	const handleYearChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => { setYear(e.target.value); }, [])
+
 	return (
-		<div className="container mx-auto p-6 max-w-lg bg-white shadow-lg rounded-lg">
-			<h1 className="text-3xl font-bold mb-6 text-center">Car Dealer Filter</h1>
+		<div className="container mx-auto max-w-lg rounded-lg bg-white p-6 shadow-lg">
+			<h1 className="mb-6 text-center text-3xl font-bold">Car Dealer Filter</h1>
 
 			<div className="mb-6">
-				<label htmlFor="make" className="block text-lg font-medium mb-2">
+				<label className="mb-2 block text-lg font-medium" htmlFor="make">
 					Select Make
 				</label>
 				<select
+					className="w-full rounded-md border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
 					id="make"
-					className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+					onChange={handleMakeChange}
 					value={makeId}
-					onChange={(e) => setMakeId(e.target.value)}
 				>
 					<option value="">Select Make</option>
 					{makes.map((make) => (
@@ -58,14 +66,14 @@ export default function FilterForm(): JSX.Element {
 			</div>
 
 			<div className="mb-6">
-				<label htmlFor="year" className="block text-lg font-medium mb-2">
+				<label className="mb-2 block text-lg font-medium" htmlFor="year">
 					Select Model Year
 				</label>
 				<select
+					className="w-full rounded-md border border-gray-300 p-3 focus:ring-2 focus:ring-blue-500"
 					id="year"
-					className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+					onChange={handleYearChange}
 					value={year}
-					onChange={(e) => setYear(e.target.value)}
 				>
 					<option value="">Select Year</option>
 					{availableYears.map((yearOption) => (
@@ -78,10 +86,10 @@ export default function FilterForm(): JSX.Element {
 
 			<div className="text-center">
 				<Link
-					href={`/result/${makeId}/${year}`}
-					className={`px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition duration-300 ease-in-out transform hover:bg-blue-700 ${
-						!makeId || !year ? 'opacity-50 cursor-not-allowed' : ''
+					className={`rounded-md bg-blue-600 px-6 py-3 font-semibold text-white transition duration-300 ease-in-out hover:bg-blue-700${
+						!makeId || !year ? 'cursor-not-allowed opacity-50' : ''
 					}`}
+					href={`/result/${makeId}/${year}`}
 				>
 					Next
 				</Link>

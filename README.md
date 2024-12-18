@@ -34,9 +34,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Project structure
 
 - `app/components`: Contains client components.
-  - `FilterForm.jsx`: Displays the filter form and fetches data for populating the dropdown with car model options.
-  - `Result.jsx`: Fetches and displays data based on the model and year parameters from the URL.
-- `app/result/[makeId]/[year]/page.js`: Server-side component for the results page. Implements `generateStaticParams` for static generation based on parameters.
+  - `FilterForm.tsx`: Displays the filter form and fetches data for populating the dropdown with car model options.
+  - `Result.tsx`: Fetches and displays data based on the model and year parameters from the URL.
+- `app/result/[makeId]/[year]/page.tsx`: Server-side component for the results page. Implements `generateStaticParams` for static generation based on parameters.
 - `page.tsx`: Main component for the filter page, rendering the `FilterForm`.
 
 

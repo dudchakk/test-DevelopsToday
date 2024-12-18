@@ -3,12 +3,17 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
-export default function FilterForm() {
-  const [makes, setMakes] = useState([])
-  const [makeId, setMakeId] = useState('')
-  const [year, setYear] = useState('')
+interface Make {
+  MakeId: string
+  MakeName: string
+}
 
-  const fetchMakes = async () => {
+export default function FilterForm(): JSX.Element {
+  const [makes, setMakes] = useState<Make[]>([])
+  const [makeId, setMakeId] = useState<string>('')
+  const [year, setYear] = useState<string>('')
+
+  const fetchMakes = async (): Promise<void> => {
     try {
       const response = await fetch(
         'https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json'
@@ -24,21 +29,27 @@ export default function FilterForm() {
     fetchMakes()
   }, [])
 
-  return (
-    <div className='container mx-auto p-6 max-w-lg bg-white shadow-lg rounded-lg'>
-      <h1 className='text-3xl font-bold mb-6 text-center'>Car Dealer Filter</h1>
+  const currentYear = new Date().getFullYear()
+  const availableYears = Array.from(
+    { length: currentYear - 2014 },
+    (_, i) => (2015 + i).toString()
+  )
 
-      <div className='mb-6'>
-        <label htmlFor='make' className='block text-lg font-medium mb-2'>
+  return (
+    <div className="container mx-auto p-6 max-w-lg bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center">Car Dealer Filter</h1>
+
+      <div className="mb-6">
+        <label htmlFor="make" className="block text-lg font-medium mb-2">
           Select Make
         </label>
         <select
-          id='make'
-          className='w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
+          id="make"
+          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           value={makeId}
           onChange={(e) => setMakeId(e.target.value)}
         >
-          <option value=''>Select Make</option>
+          <option value="">Select Make</option>
           {makes.map((make) => (
             <option key={make.MakeId} value={make.MakeId}>
               {make.MakeName}
@@ -47,21 +58,18 @@ export default function FilterForm() {
         </select>
       </div>
 
-      <div className='mb-6'>
-        <label htmlFor='year' className='block text-lg font-medium mb-2'>
+      <div className="mb-6">
+        <label htmlFor="year" className="block text-lg font-medium mb-2">
           Select Model Year
         </label>
         <select
-          id='year'
-          className='w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500'
+          id="year"
+          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           value={year}
           onChange={(e) => setYear(e.target.value)}
         >
-          <option value=''>Select Year</option>
-          {Array.from(
-            { length: new Date().getFullYear() - 2014 },
-            (_, i) => 2015 + i
-          ).map((yearOption) => (
+          <option value="">Select Year</option>
+          {availableYears.map((yearOption) => (
             <option key={yearOption} value={yearOption}>
               {yearOption}
             </option>
@@ -69,7 +77,7 @@ export default function FilterForm() {
         </select>
       </div>
 
-      <div className='text-center'>
+      <div className="text-center">
         <Link
           href={`/result/${makeId}/${year}`}
           className={`px-6 py-3 bg-blue-600 text-white font-semibold rounded-md transition duration-300 ease-in-out transform hover:bg-blue-700 ${
